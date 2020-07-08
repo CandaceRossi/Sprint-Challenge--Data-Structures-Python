@@ -1,15 +1,26 @@
+from collections import OrderedDict
+
+
 class RingBuffer:
     def __init__(self, capacity):
+        self.cache = OrderedDict()
         self.capacity = capacity
-        self.data = [None for i in range(capacity)]
 
-    def append(self, item):
-        self.data.pop(0)
-        self.data.append(item)
-        if len(self.data) == self.max:
-            self.cur = 0
-            self.__class__ = RingBufferFull
+    def get(self, item):
+        self.item = item
+        if item not in self.cache:
+            return -1
+        else:
+            self.cache.move_to_end(item)
+            return self.cache[item]
 
-    def get(self):
-    
-        return self.data
+    def append(self, item, value):
+        self.item = item
+        self.value = value
+        self.cache[item] = value
+        self.cache.move_to_end(item)
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
+
+
+cache = RingBuffer(2)
