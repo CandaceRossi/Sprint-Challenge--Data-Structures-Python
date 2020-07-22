@@ -12,6 +12,28 @@ class Node:
     def set_next(self, new_next):
         self.next_node = new_next
 
+
+class Stack:
+    def __init__(self):
+        self.size = 0
+        self.storage = LinkedList()
+
+    def __len__(self):
+        return self.size
+
+    def push(self, value):
+        self.size += 1
+
+        self.storage.add_to_head(value)
+
+    def pop(self):
+        if self.size == 0:
+            return None
+        self.size -= 1
+        node = self.storage.remove_head()
+        return node
+
+
 class LinkedList:
     def __init__(self):
         self.head = None
@@ -39,4 +61,14 @@ class LinkedList:
         return False
 
     def reverse_list(self, node, prev):
-        pass
+        if node.next_node is None:
+            self.head = node
+
+            node.next_node = prev
+            return
+
+        next = node.next_node
+
+        node.next_node = prev
+
+        self.reverse_list(next, node)
